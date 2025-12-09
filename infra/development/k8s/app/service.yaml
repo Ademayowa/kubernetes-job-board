@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: job-board-service
+  namespace: app
+  labels:
+    app: job-board
+spec:
+  type: ClusterIP  # Internal service (we'll use Gateway API for external access)
+  selector:
+    app: job-board
+  ports:
+  - name: http
+    protocol: TCP
+    port: 8080        # Service port
+    targetPort: 8080  # Container port
+  sessionAffinity: None
