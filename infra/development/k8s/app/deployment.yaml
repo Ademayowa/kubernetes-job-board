@@ -1,12 +1,57 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+  namespace: app
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15-alpine
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: jobboard
+            - name: POSTGRES_USER
+              value: jobboard
+            - name: POSTGRES_PASSWORD
+              value: mysecurepassword123
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: job-board-app
   namespace: app
-  labels:
-    app: job-board
 spec:
-  replicas: 2  
+  replicas: 1
   selector:
     matchLabels:
       app: job-board
@@ -16,29 +61,12 @@ spec:
         app: job-board
     spec:
       containers:
-      - name: job-board
-        image: job-board:v1.0.0
-        imagePullPolicy: IfNotPresent  
-        ports:
-        - containerPort: 8080
-          name: http
-        env:
-        # From ConfigMap
-        - name: GIN_MODE
-          valueFrom:
-            configMapKeyRef:
-              name: job-board-config
-              key: GIN_MODE
-        # From Secret
-        - name: DATABASE_URL
-          valueFrom:
-            secretKeyRef:
-              name: job-board-secret
-              key: DATABASE_URL
-        resources:
-          requests:
-            memory: "128Mi"
-            cpu: "100m"
-          limits:
-            memory: "256Mi"
-            cpu: "500m"
+        - name: job-board
+          image: job-board:v1.0.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: GIN_MODE
+              value: release
+            - name: DATABASE_URL
+              value: postgres://jobboard:mysecurepassword123@postgres-service:5432/jobboard?sslmode=disable
