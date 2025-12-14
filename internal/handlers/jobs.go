@@ -14,17 +14,17 @@ func createJob(ctx *gin.Context) {
 
 	err := ctx.ShouldBindJSON(&job)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "could not parse job data: " + err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "could not parse job data" + err.Error()})
 		return
 	}
 
 	err = job.Save()
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "could not save job: " + err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "could not save job" + err.Error()})
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{"message": "job created", "job": job})
+	ctx.JSON(http.StatusCreated, job)
 }
 
 // Get all jobs
@@ -32,9 +32,14 @@ func getJobs(ctx *gin.Context) {
 	jobs, err := models.GetAll()
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "could not fetch jobs"})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "could not fetch jobs" + err.Error()})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"jobs": jobs})
+	ctx.JSON(http.StatusOK, jobs)
+}
+
+// Health check endpoint
+func healthCheck(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, gin.H{"status": "ok"})
 }
