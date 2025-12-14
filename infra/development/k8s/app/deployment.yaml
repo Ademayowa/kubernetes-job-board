@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: job-board
-          image: job-board:v1.0.0
+          image: job-board:v1.0.1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
