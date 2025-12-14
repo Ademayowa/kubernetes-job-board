@@ -24,7 +24,7 @@ func createJob(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, job)
+	ctx.JSON(http.StatusCreated, gin.H{"message": "job created!", "job": job})
 }
 
 // Get all jobs
