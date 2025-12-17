@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: job-board-app
+  name: job-board-api
   namespace: app
 spec:
   replicas: 1
@@ -14,7 +14,7 @@ spec:
         app: job-board
     spec:
       containers:
-        - name: job-board
+        - name: rest-api
           image: job-board:v1.0.1
           imagePullPolicy: IfNotPresent
           ports:
