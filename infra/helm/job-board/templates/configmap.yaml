@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: job-board-config
-  namespace: app
+  name: {{ .Chart.Name }}-config
+  namespace: {{ .Release.Namespace }}
 data:
-  GIN_MODE: "release"
-  POSTGRES_DB: "jobboard"
-  POSTGRES_USER: "jobboard"
+  GIN_MODE: {{ .Values.config.ginMode | quote }}
+  POSTGRES_DB: {{ .Values.config.postgresDb | quote }}
+  POSTGRES_USER: {{ .Values.config.postgresUser | quote }}
