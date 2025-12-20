@@ -1,4 +1,5 @@
 # Production environment values
+
 replicaCount: 3
 
 image:
