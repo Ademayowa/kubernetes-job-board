@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func RegisterRoutes(server *gin.Engine) {
@@ -17,7 +18,13 @@ func RegisterRoutes(server *gin.Engine) {
 		MaxAge:           12 * time.Hour,
 	}))
 
+	// Metrics middleware
+	server.Use(metricsMiddleware())
+
 	server.GET("/jobs", getJobs)
 	server.POST("/jobs", createJob)
 	server.GET("/healthz", healthCheck)
+
+	// Metrics endpoint
+	server.GET("/metrics", gin.WrapH(promhttp.Handler()))
 }
