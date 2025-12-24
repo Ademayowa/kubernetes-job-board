@@ -1,3 +1,5 @@
+# Base/default values
+
 replicaCount: 1
 
 image:
@@ -16,7 +18,9 @@ config:
   postgresUser: jobboard
 
 postgres:
-  image: postgres:15-alpine
+  image:
+    repository: postgres
+    tag: 15-alpine
   storage: 256Mi
   resources:
     requests:

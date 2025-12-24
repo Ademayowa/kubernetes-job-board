@@ -7,16 +7,16 @@ image:
 
 service:
   type: LoadBalancer
+  port: 8080
 
-resources:
-  requests:
-    memory: 256Mi
-    cpu: 200m
-  limits:
-    memory: 512Mi
-    cpu: 1000m
+config:
+  ginMode: release
+  postgresDb: jobboard_prod
+  postgresUser: jobboard_prod
 
 postgres:
+  image:
+    tag: 15.2-alpine
   storage: 10Gi
   resources:
     requests:
@@ -25,3 +25,11 @@ postgres:
     limits:
       memory: 512Mi
       cpu: 500m
+
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 200m
+  limits:
+    memory: 512Mi
+    cpu: 1000m

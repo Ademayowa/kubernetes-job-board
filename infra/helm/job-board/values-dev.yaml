@@ -7,17 +7,17 @@ image:
 
 service:
   type: NodePort
+  port: 8080
   nodePort: 30081
 
-resources:
-  requests:
-    memory: 64Mi
-    cpu: 50m
-  limits:
-    memory: 128Mi
-    cpu: 200m
+config:
+  ginMode: debug # Dev uses debug mode
+  postgresDb: jobboard_dev
+  postgresUser: jobboard
 
 postgres:
+  image:
+    tag: 15-alpine
   storage: 256Mi
   resources:
     requests:
@@ -26,3 +26,11 @@ postgres:
     limits:
       memory: 64Mi
       cpu: 100m
+
+resources:
+  requests:
+    memory: 64Mi
+    cpu: 50m
+  limits:
+    memory: 128Mi
+    cpu: 200m
