@@ -1,0 +1,18 @@
+# ServiceMonitor - Tells Prometheus to scrape metrics from your app
+
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ .Chart.Name }}-metrics
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Chart.Name }}
+    release: prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 30s
