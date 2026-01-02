@@ -74,3 +74,15 @@ EOF
 export $(cat .env.local | xargs)
 go run cmd/main.go
 ```
+
+### Fixes Go backend in Local dev
+
+```bash
+# Stop everything and remove volumes
+docker-compose down -v
+
+# Rebuild with NO cache to get your current simple code
+docker-compose build --no-cache app
+
+docker-compose up -d
+```
