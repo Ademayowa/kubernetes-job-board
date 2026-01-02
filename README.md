@@ -58,3 +58,19 @@ curl -X POST http://localhost:8080/jobs \
 ```
 
 Open [http://localhost:8080/jobs](http://localhost:8080/jobs) in your browser to view all jobs.
+
+### Create separate .env.local for Go backend development with Docker compose
+
+```bash
+cat > .env.local << EOF
+DATABASE_URL=postgres://jobboard:mysecurepassword123@localhost:5432/jobboard_dev?sslmode=disable
+GIN_MODE=debug
+EOF
+```
+
+### Then Load it
+
+```bash
+export $(cat .env.local | xargs)
+go run cmd/main.go
+```
